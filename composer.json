@@ -1,12 +1,12 @@
 {
-    "name": "rupalipshinde/template",
+    "name": "knowzies-tech/template",
     "description": "template with localization",
     "type": "library",
     "license": "MIT",
     "authors": [
         {
-            "name": "Rupali Shinde",
-            "email": "rups.mahajan1@gmail.com"
+            "name": "Knowzies",
+            "email": "lokesh.kumar@knowzies.com"
         }
     ],
     "autoload": {
