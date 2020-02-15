@@ -1,0 +1,26 @@
+{
+    "name": "rupalipshinde/template",
+    "description": "template with localization",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Rupali Shinde",
+            "email": "rups.mahajan1@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Rupalipshinde\\Template\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Rupalipshinde\\Template\\TemplateServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "dev",
+    "require": {}
+}
