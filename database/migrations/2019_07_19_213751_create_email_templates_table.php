@@ -23,6 +23,7 @@ class CreateEmailTemplatesTable extends Migration {
             $table->string('event');
             $table->enum('status', ['0', '1'])->default('0');
             $table->string('mail_to')->default('A');
+	    $table->enum('is_updated', ['0', '1'])->default('0');
             $table->timestamps();
             $table->softDeletes();
         });
