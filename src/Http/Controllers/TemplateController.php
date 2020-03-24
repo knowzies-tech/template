@@ -70,7 +70,9 @@ class TemplateController {
                         ->where('language', $appLang)
                         ->where('status', '1')
                         ->first());
-        if ($templateData) {
+
+        if ($templateData->resource) {
+
             foreach ($data as $datakey => $value) {
                 foreach (json_decode($templateData['placeholder']) as $key => $value) {
                     if ($key == $datakey) {
@@ -83,8 +85,9 @@ class TemplateController {
             if ($link != '') {
                 $templateData['description'] = str_replace("[PASSWORD_RESET_URL]", $link, $templateData['description']);
             }
+             return $templateData;
         }
-        return $templateData;
+        return [];
     }
 
     /**
@@ -144,7 +147,7 @@ class TemplateController {
         $template->subject = $request->subject;
         $template->description = $request->description;
         $template->language = $request->language;
-	$template->is_updated = '1';
+        $template->is_updated = '1';
         $template->save();
         return response(
                 array(
