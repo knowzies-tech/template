@@ -66,12 +66,12 @@ class TemplateController {
      */
     public function findTemplateUsingEvent($event, $data, $link = '') {
         $appLang = $this->app->config->get('app.locale') ? $this->app->config->get('app.locale') : $this->app->config->get('app.fallback_locale');
-        $templateData = new TemplateResource(TemplateModel::where('event', $event)
+        $templateData = TemplateModel::where('event', $event)
                         ->where('language', $appLang)
                         ->where('status', '1')
-                        ->first());
+                        ->first();
 
-        if ($templateData->resource) {
+        if ($templateData) {
 
             foreach ($data as $datakey => $value) {
                 foreach (json_decode($templateData['placeholder']) as $key => $value) {
