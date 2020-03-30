@@ -72,7 +72,7 @@ class TemplateController {
                         ->first();
 
         if ($templateData) {
-
+	    $templateData = new TemplateResource($templateData);
             foreach ($data as $datakey => $value) {
                 foreach (json_decode($templateData['placeholder']) as $key => $value) {
                     if ($key == $datakey) {
