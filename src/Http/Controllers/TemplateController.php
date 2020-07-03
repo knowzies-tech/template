@@ -38,9 +38,12 @@ class TemplateController {
      * @return \Illuminate\Database\Eloquent\Collection
      */
     public function forTemplate(Request $request) {
+        $system_setting = getSystemSetting();
         $appLang = $this->app->config->get('app.locale') ? $this->app->config->get('app.locale') : $this->app->config->get('app.fallback_locale');
         return TemplateResource::collection(TemplateModel::search($request->filter)
-                                ->where('language', $appLang)
+                                ->where('language', $appLang)->when($system_setting->multi_portal == 1, function($query) {
+                                    $query->where('event', 'set_password');
+                                })
                                 ->when($request->sort_name != '', function($query) use ($request) {
                                     $query->orderBy($request->sort_name, $request->sort_dir);
                                 })
