@@ -6,7 +6,7 @@ use Illuminate\Database\Migrations\Migration;
 use phpDocumentor\Reflection\Types\Nullable;
 use Rupalipshinde\Template\TemplateModel;
 
-class CreateEmailTemplatesTable extends Migration
+class AddCcAddressToEmailTemplatesTable extends Migration
 {
 
     /**
