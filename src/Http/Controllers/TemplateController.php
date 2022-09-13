@@ -161,6 +161,9 @@ if ($key == 'COURSE_COMPLETION_DATE') {
         $template->subject = $request->subject;
         $template->description = $request->description;
         $template->language = $request->language;
+        if($request->cc_mail){
+            $template->cc_mail = $request->cc_mail;
+        }
         $template->is_updated = '1';
         $template->save();
         return response(
