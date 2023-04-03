@@ -86,8 +86,18 @@ class TemplateController
             foreach ($data as $datakey => $value) {
                 foreach (json_decode($templateData['placeholder']) as $key => $value) {
                     if ($key == $datakey) {
-                        if ($key == 'COURSE_COMPLETION_DATE') {
-                            $data[$datakey] = Carbon::parse($data[$datakey])->timezone(USER_TIMEZONE)->format(USER_DATE_FORMAT . ' H:i:s');
+                        if (isset($data['connectionId'])) {
+                            if ($data['connectionId'] == 0) {
+                                if ($key == 'COURSE_COMPLETION_DATE') {
+                                    $data[$datakey] = Carbon::parse($data[$datakey])->timezone(USER_TIMEZONE)->format(USER_DATE_FORMAT . ' H:i:s');
+                                } else {
+                                    $data[$datakey] = Carbon::now()->format('d-m-Y H:i:s');
+                                }
+                            }
+                        } else {
+                            if ($key == 'COURSE_COMPLETION_DATE') {
+                                $data[$datakey] = Carbon::parse($data[$datakey])->timezone(USER_TIMEZONE)->format(USER_DATE_FORMAT . ' H:i:s');
+                            }
                         }
                         if ($key == 'COURSE_ASSIGNMENT_DATE') {
                             $data[$datakey] = Carbon::parse($data[$datakey])->timezone(USER_TIMEZONE)->format(USER_DATE_FORMAT . ' H:i:s');
@@ -95,6 +105,7 @@ class TemplateController
                         if ($key == 'COURSE_END_DATE') {
                             $data[$datakey] = Carbon::parse($data[$datakey])->timezone(USER_TIMEZONE)->format(USER_DATE_FORMAT . ' H:i:s');
                         }
+
                         $templateData['description'] = str_replace("[" . $key . "]", $data[$datakey], $templateData['description']);
                         break;
                     }
