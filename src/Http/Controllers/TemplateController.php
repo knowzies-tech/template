@@ -87,8 +87,8 @@ class TemplateController
                 foreach (json_decode($templateData['placeholder']) as $key => $value) {
                     if ($key == $datakey) {
                         if (isset($data['connectionId'])) {
-                            if ($data['connectionId'] == 0) {
-                                if ($key == 'COURSE_COMPLETION_DATE') {
+                            if ($key == 'COURSE_COMPLETION_DATE') {
+                                if ($data['connectionId'] == 0) {
                                     $data[$datakey] = Carbon::parse($data[$datakey])->timezone(USER_TIMEZONE)->format(USER_DATE_FORMAT . ' H:i:s');
                                 } else {
                                     $data[$datakey] = Carbon::now()->format('d-m-Y H:i:s');
