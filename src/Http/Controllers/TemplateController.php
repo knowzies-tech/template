@@ -180,14 +180,18 @@ class TemplateController
 
         $templateData = null;
 
+        // Save connection before resetCourse() clears it
+        $connection = $this->connection;
+
+
         // Step 1: If courseId is set, check course mapping table first
         if ($this->useCustomTable && ($this->courseId || $this->learningPathId)) {
             $courseModel = new TemplateModel();
             $courseModel->setTable('custom_email_templates');
 
             // Use specific connection if provided
-            if ($this->connection) {
-                $courseModel->setConnection($this->connection);
+            if ($connection) {
+                $courseModel->setConnection($connection);
             }
 
             $templateData = $courseModel->newQuery()
@@ -208,8 +212,8 @@ class TemplateController
             $defaultModel->setTable('email_templates'); // explicitly set default table
 
             // Use specific connection if provided
-            if ($this->connection) {
-                $defaultModel->setConnection($this->connection);
+            if ($connection) {
+                $defaultModel->setConnection($connection);
             }
 
             $templateData = $defaultModel->newQuery()  // fresh query on default table
@@ -345,14 +349,17 @@ class TemplateController
         }
         $templateData = null;
 
+        // Save connection before resetCourse() clears it
+        $connection = $this->connection;
+
         // 1. Check Course Mapping Table
         if ($this->useCustomTable && ($this->courseId || $this->learningPathId)) {
             $courseModel = new TemplateModel();
             $courseModel->setTable('custom_email_templates');
 
             // Use specific connection if provided
-            if ($this->connection) {
-                $courseModel->setConnection($this->connection);
+            if ($connection) {
+                $courseModel->setConnection($connection);
             }
 
             $templateData = $courseModel->newQuery()
@@ -374,8 +381,8 @@ class TemplateController
             $defaultModel->setTable('email_templates');
 
             // Use specific connection if provided
-            if ($this->connection) {
-                $defaultModel->setConnection($this->connection);
+            if ($connection) {
+                $defaultModel->setConnection($connection);
             }
 
             $templateData = $defaultModel->newQuery()
