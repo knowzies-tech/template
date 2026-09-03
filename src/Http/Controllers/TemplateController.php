@@ -32,6 +32,7 @@ class TemplateController
     protected $useCustomTable = false;
     protected $courseId = null;
     protected $learningPathId = null;
+    protected $connection = null;
     // end : Alankarika
 
     public function __construct(Application $app)
@@ -47,6 +48,12 @@ class TemplateController
      */
 
     //Start : For Custom Notification :Alankarika
+    public function onConnection(string $connection): self
+    {
+        $this->connection = $connection;
+        return $this;
+    }
+
     /**
      * Enable course-specific template lookup.
      */
@@ -55,6 +62,7 @@ class TemplateController
         $this->useCustomTable = true;
         $this->courseId = $courseId;
         $this->learningPathId  = null;
+        // $this->connection = null;
         return $this;
     }
 
@@ -63,6 +71,7 @@ class TemplateController
         $this->useCustomTable = true;
         $this->learningPathId = $learningPathId;
         $this->courseId = null; //
+        // $this->connection = null;
         return $this;
     }
 
@@ -74,6 +83,7 @@ class TemplateController
         $this->useCustomTable = false;
         $this->courseId = null;
         $this->learningPathId = null; // Add this line
+        $this->connection = null;
         return $this;
     }
 
@@ -167,12 +177,18 @@ class TemplateController
         $appLang = $this->app->config->get('app.locale')
             ?: $this->app->config->get('app.fallback_locale');
 
+
         $templateData = null;
 
         // Step 1: If courseId is set, check course mapping table first
         if ($this->useCustomTable && ($this->courseId || $this->learningPathId)) {
             $courseModel = new TemplateModel();
             $courseModel->setTable('custom_email_templates');
+
+            // Use specific connection if provided
+            if ($this->connection) {
+                $courseModel->setConnection($this->connection);
+            }
 
             $templateData = $courseModel->newQuery()
                 ->when($this->courseId, fn($q) => $q->where('course_id', $this->courseId))
@@ -185,10 +201,16 @@ class TemplateController
             $this->resetCourse();
         }
 
+
         // Step 2: Fallback to email_templates if no course mapping found
         if (!$templateData) {
             $defaultModel = new TemplateModel();
             $defaultModel->setTable('email_templates'); // explicitly set default table
+
+            // Use specific connection if provided
+            if ($this->connection) {
+                $defaultModel->setConnection($this->connection);
+            }
 
             $templateData = $defaultModel->newQuery()  // fresh query on default table
                 ->where('event', $event)
@@ -229,7 +251,7 @@ class TemplateController
                         }
                     }
 
-                     if (isset($data['connectionId'])) {
+                    if (isset($data['connectionId'])) {
                         if ($key == 'COURSE_ASSIGNMENT_DATE') {
                             if ($data['connectionId'] == 0) {
                                 $data[$datakey] = Carbon::parse($data[$datakey])->timezone(USER_TIMEZONE)->format(USER_DATE_FORMAT . ' H:i:s');
@@ -328,6 +350,11 @@ class TemplateController
             $courseModel = new TemplateModel();
             $courseModel->setTable('custom_email_templates');
 
+            // Use specific connection if provided
+            if ($this->connection) {
+                $courseModel->setConnection($this->connection);
+            }
+
             $templateData = $courseModel->newQuery()
                 // ->where('course_id', $this->courseId)
                 ->when($this->courseId, fn($q) => $q->where('course_id', $this->courseId))
@@ -345,6 +372,11 @@ class TemplateController
         if (!$templateData) {
             $defaultModel = new TemplateModel();
             $defaultModel->setTable('email_templates');
+
+            // Use specific connection if provided
+            if ($this->connection) {
+                $defaultModel->setConnection($this->connection);
+            }
 
             $templateData = $defaultModel->newQuery()
                 ->where('event', $event)
